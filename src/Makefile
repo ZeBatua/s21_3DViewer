@@ -28,7 +28,6 @@ all: clean gcov_report dvi install run
 install: 
 	cd Widget && qmake Widget.pro
 	cd Widget && make
-	cd Widget && open Widget.app
 	cd Widget && make clean
 
 run:

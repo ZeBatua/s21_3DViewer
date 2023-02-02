@@ -108,9 +108,7 @@ void initFileData(file_data *data) {
 
 void freeMem(file_data *data) {
   if (data != NULL) {
-    if (&data->matrix_3d != NULL) {
       s21_remove_matrix(&data->matrix_3d);
-    }
     if (data->polygons != NULL) {
       for (unsigned int i = 0; i < data->count_of_facets; i++) {
         free(data->polygons[i].vertexes);
@@ -128,43 +126,28 @@ float *rewrite_matrix(file_data *data) {
       if (data->count_of_facets != 0) {
         for (int i = 1; i < data->matrix_3d.rows; i++) {
           for (int j = 0; j < data->matrix_3d.columns; j++) {
-            if (data->matrix_3d.matrix[i] != NULL) {
-              if (&data->matrix_3d.matrix[i][j] != NULL) {
-                new_matrix[k] =
-                    data->matrix_3d.matrix[i][j] / data->matrix_3d.max_value;
-                k++;
-              } else {
-                free(new_matrix);
-                return NULL;
-              }
-            } else {
-              free(new_matrix);
-              return NULL;
-            }
+            new_matrix[k] =
+            data->matrix_3d.matrix[i][j] / data->matrix_3d.max_value;
+            k++;
           }
         }
       }
     }
-    return new_matrix;
-
-  } else {
-    return NULL;
+  return new_matrix;
   }
 }
 
+
+
 unsigned int *write_facets(file_data *data) {
-  unsigned int *new_matrix =
-      calloc(data->full_amount_of_vertexes_in_facets * 2, sizeof(unsigned int));
+  unsigned int *new_matrix =calloc(data->full_amount_of_vertexes_in_facets * 2, sizeof(unsigned int));
   if (data->count_of_facets != 0) {
     unsigned int p_counter = 0, v_index = 0, mass_counter = 0;
     while (p_counter < data->count_of_facets) {
-      while (data->polygons[p_counter].vertexes != NULL) {
         new_matrix[mass_counter] = data->polygons[p_counter].vertexes[v_index];
         mass_counter++;
-        if (v_index + 1 <
-            data->polygons[p_counter].numbers_of_vertexes_in_facets) {
-          new_matrix[mass_counter] =
-              data->polygons[p_counter].vertexes[v_index + 1];
+        if (v_index + 1 < data->polygons[p_counter].numbers_of_vertexes_in_facets) {
+          new_matrix[mass_counter] = data->polygons[p_counter].vertexes[v_index + 1];
           mass_counter++;
         } else {
           new_matrix[mass_counter] = data->polygons[p_counter].vertexes[0];
@@ -172,7 +155,6 @@ unsigned int *write_facets(file_data *data) {
           break;
         }
         v_index++;
-      }
       v_index = 0;
       p_counter++;
     }

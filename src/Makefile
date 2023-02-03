@@ -1,7 +1,7 @@
-CC=gcc
+CC=gcc #-fsanitize=address -g
 LC = lcov
 
-CFLAGS = -c -Wall -Wextra -Werror -std=c11 # -fsanitize=address -g
+CFLAGS = -c -Wall -Wextra -Werror -std=c11
 AFLAGS = ar rc
 GCOVFLAGS = -fprofile-arcs -ftest-coverage
 LCOVFLAGS = -c -d . -o
@@ -38,10 +38,8 @@ dvi:
 	mv ./3DViewer.dvi ./Documentation
 	rm -rf ./3DViewer.aux ./3DViewer.log
 
-dist: install
-	tar -cvf 3DViewer.tar Documentation/3DViewer.dvi 
-	Applications/Widget.app
-	gzip 3DViewer.tar
+dist:
+	cd .. && tar -czf 3DViewer.tgz src
 
 clang:
 	bash style.sh
@@ -54,9 +52,6 @@ gcov_report: test
 	$(LC) $(LCOVFLAGS) report.info
 	genhtml -o reportdir report.info
 	$(OPEN_CMD) ./reportdir/index.html
-
-leakscheck: test
-	leaks --atExit -- ./test
 
 .c.o:
 	$(CC) $(CFLAGS) $< $(GCOVFLAGS) -o $@
@@ -86,6 +81,7 @@ clean:
 	rm -rf reportdir
 	rm -rf Widget/.qm 
 	rm -rf Widget/.qmake.stash
+	rm -rf *.gcno
 	cd Widget && rm -rf Widget.app
 	cd Widget && rm -rf qmake_qmake_qm_files.qrc
 

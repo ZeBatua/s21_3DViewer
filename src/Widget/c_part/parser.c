@@ -74,7 +74,7 @@ void getVertexesInFacet(char *str_pos, file_data *data,
   char *token;
 
   while ((token = strtok_r(temp, " ", &temp))) {
-    if (*token != '0' && *token != '\n') {
+    if (*token != '0' && *token != '\n' && *token != '\r') {
       data->polygons[*facets_counter].numbers_of_vertexes_in_facets++;
       data->full_amount_of_vertexes_in_facets++;
     }
@@ -87,7 +87,7 @@ void fillFacetMatrix(char *str_pos, file_data *data,
   char *token;
 
   while ((token = strtok_r(str_pos, " ", &str_pos))) {
-    if (*token == '\n' || *token == ' ') break;
+    if (*token == '\n' || *token == ' ' || *token == '\r') break;
     if (*token != '0') {
       data->polygons[*facets_counter].vertexes[i] = atoi(token) - 1;
       i++;
@@ -140,14 +140,18 @@ float *rewrite_matrix(file_data *data) {
 
 
 unsigned int *write_facets(file_data *data) {
-  unsigned int *new_matrix =calloc(data->full_amount_of_vertexes_in_facets * 2, sizeof(unsigned int));
+  unsigned int *new_matrix =
+      calloc(data->full_amount_of_vertexes_in_facets * 2, sizeof(unsigned int));
   if (data->count_of_facets != 0) {
     unsigned int p_counter = 0, v_index = 0, mass_counter = 0;
     while (p_counter < data->count_of_facets) {
+      while (data->polygons[p_counter].vertexes != NULL) {
         new_matrix[mass_counter] = data->polygons[p_counter].vertexes[v_index];
         mass_counter++;
-        if (v_index + 1 < data->polygons[p_counter].numbers_of_vertexes_in_facets) {
-          new_matrix[mass_counter] = data->polygons[p_counter].vertexes[v_index + 1];
+        if (v_index + 1 <
+            data->polygons[p_counter].numbers_of_vertexes_in_facets) {
+          new_matrix[mass_counter] =
+              data->polygons[p_counter].vertexes[v_index + 1];
           mass_counter++;
         } else {
           new_matrix[mass_counter] = data->polygons[p_counter].vertexes[0];
@@ -155,6 +159,7 @@ unsigned int *write_facets(file_data *data) {
           break;
         }
         v_index++;
+      }
       v_index = 0;
       p_counter++;
     }

@@ -31,7 +31,7 @@ START_TEST(test_3) {
 START_TEST(test_6) {
   file_data data;
   file_data Sdata;
-  char* path = "./tests/cube.obj";
+  char *path = "./tests/cube.obj";
   readFile(path, &data);
   readFile(path, &Sdata);
   double buf = 5;
@@ -47,7 +47,6 @@ START_TEST(test_6) {
   ck_assert_int_eq(1, error);
 }
 END_TEST
-
 
 START_TEST(test_9) {
   file_data data;
@@ -68,8 +67,6 @@ START_TEST(test_9) {
   ck_assert_int_eq(1, error);
 }
 END_TEST
-
-
 
 //---------------------------------
 
@@ -237,14 +234,14 @@ START_TEST(s21_rotationZ) {
 }
 END_TEST
 
-
-
 START_TEST(rewrite_m) {
   file_data data;
   char *path = "./tests/cube.obj";
   readFile(path, &data);
   float *new_matrix = rewrite_matrix(&data);
-  float result[] = {-1.0,-1.0,-1.0,-1.0,-1.0,1.0,-1.0,1.0,-1.0,-1.0,1.0,1.0,1.0,-1.0,-1.0,1.0,-1.0,1.0,1.0,1.0,-1.0,1.0,1.0,1.0};
+  float result[] = {-1.0, -1.0, -1.0, -1.0, -1.0, 1.0,  -1.0, 1.0,
+                    -1.0, -1.0, 1.0,  1.0,  1.0,  -1.0, -1.0, 1.0,
+                    -1.0, 1.0,  1.0,  1.0,  -1.0, 1.0,  1.0,  1.0};
 
   for (int i = 0; i < 24; i++) {
     ck_assert_float_eq(new_matrix[i], result[i]);
@@ -259,7 +256,7 @@ START_TEST(rewrite_f) {
   char *path = "./tests/cube.obj";
   readFile(path, &data);
   unsigned int *new_matrix = write_facets(&data);
-  unsigned int result[] = {0,6,6,4,4,0};
+  unsigned int result[] = {0, 6, 6, 4, 4, 0};
 
   for (int i = 0; i < 6; i++) {
     ck_assert_uint_eq(new_matrix[i], result[i]);
@@ -269,11 +266,10 @@ START_TEST(rewrite_f) {
 }
 END_TEST
 
-
 int main(void) {
-  Suite* s1 = suite_create("Core");
-  TCase* tc = tcase_create("Core");
-  SRunner* sr = srunner_create(s1);
+  Suite *s1 = suite_create("Core");
+  TCase *tc = tcase_create("Core");
+  SRunner *sr = srunner_create(s1);
   int nf;
   suite_add_tcase(s1, tc);
 
@@ -291,7 +287,6 @@ int main(void) {
   tcase_add_test(tc, s21_rotationZ);
   tcase_add_test(tc, rewrite_m);
   tcase_add_test(tc, rewrite_f);
-  
 
   srunner_run_all(sr, CK_ENV);
   nf = srunner_ntests_failed(sr);

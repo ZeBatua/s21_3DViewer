@@ -108,7 +108,7 @@ void initFileData(file_data *data) {
 
 void freeMem(file_data *data) {
   if (data != NULL) {
-      s21_remove_matrix(&data->matrix_3d);
+    s21_remove_matrix(&data->matrix_3d);
     if (data->polygons != NULL) {
       for (unsigned int i = 0; i < data->count_of_facets; i++) {
         free(data->polygons[i].vertexes);
@@ -120,24 +120,22 @@ void freeMem(file_data *data) {
 
 float *rewrite_matrix(file_data *data) {
   // if (data != NULL) {
-    float *new_matrix = calloc(data->count_of_vertexes * 3, sizeof(float));
-    unsigned int k = 0;
-    if (data->matrix_3d.matrix != NULL) {
-      if (data->count_of_facets != 0) {
-        for (int i = 1; i < data->matrix_3d.rows; i++) {
-          for (int j = 0; j < data->matrix_3d.columns; j++) {
-            new_matrix[k] =
-            data->matrix_3d.matrix[i][j] / data->matrix_3d.max_value;
-            k++;
-          }
+  float *new_matrix = calloc(data->count_of_vertexes * 3, sizeof(float));
+  unsigned int k = 0;
+  if (data->matrix_3d.matrix != NULL) {
+    if (data->count_of_facets != 0) {
+      for (int i = 1; i < data->matrix_3d.rows; i++) {
+        for (int j = 0; j < data->matrix_3d.columns; j++) {
+          new_matrix[k] =
+              data->matrix_3d.matrix[i][j] / data->matrix_3d.max_value;
+          k++;
         }
       }
     }
+  }
   return new_matrix;
   // }
 }
-
-
 
 unsigned int *write_facets(file_data *data) {
   unsigned int *new_matrix =

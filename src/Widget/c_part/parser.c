@@ -119,7 +119,6 @@ void freeMem(file_data *data) {
 }
 
 float *rewrite_matrix(file_data *data) {
-  // if (data != NULL) {
   float *new_matrix = calloc(data->count_of_vertexes * 3, sizeof(float));
   unsigned int k = 0;
   if (data->matrix_3d.matrix != NULL) {
@@ -134,7 +133,6 @@ float *rewrite_matrix(file_data *data) {
     }
   }
   return new_matrix;
-  // }
 }
 
 unsigned int *write_facets(file_data *data) {
